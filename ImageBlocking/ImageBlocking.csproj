@@ -46,6 +46,7 @@
     <Compile Include="ImageHandler.cs" />
     <Compile Include="Images\IImage.cs" />
     <Compile Include="Images\JpgImage.cs" />
+    <Compile Include="Models\Block.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

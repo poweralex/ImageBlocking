@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ImageBlocking.Images
 {
-    class JpgImage : IImage
+    public class JpgImage : IImage
     {
         public Bitmap OpenImage(string path)
         {
