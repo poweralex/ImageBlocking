@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace ImageBlocking
 {
@@ -27,24 +28,66 @@ namespace ImageBlocking
         public Color FindClosestColor(Color c, IEnumerable<Color> colors)
         {
             Color best = Color.Black;
-            var ib = Math.Abs(best.ToArgb());
             foreach (var t in colors)
             {
-                var it = Math.Abs(t.ToArgb());
-                var ic = Math.Abs(c.ToArgb());
-
-                if (Math.Abs(it - ic) < Math.Abs(ib - ic))
+                if (CompareColorDiff(c, best, t) > 0)
                 {
                     best = t;
-                    ib = it;
                 }
-            }
-            if (c.Name != "ffffffff")
-            {
-                Console.WriteLine($"the original color is {c.Name}|{c.ToArgb()}, the closest color available is {best.Name}|{best.ToArgb()}");
             }
 
             return best;
+        }
+
+        /// <summary>
+        /// compare diff between c1-target and c2-target
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="c1"></param>
+        /// <param name="c2"></param>
+        /// <returns>1:c2 is closer; -1:c1 is closer; 0: very equal</returns>
+        private int CompareColorDiff(Color target, Color c1, Color c2)
+        {
+            // compare r+g+b
+            var rdiff1 = Math.Abs(c1.R - target.R);
+            var gdiff1 = Math.Abs(c1.G - target.G);
+            var bdiff1 = Math.Abs(c1.B - target.B);
+            var rdiff2 = Math.Abs(c2.R - target.R);
+            var gdiff2 = Math.Abs(c2.G - target.G);
+            var bdiff2 = Math.Abs(c2.B - target.B);
+            if ((rdiff1 + gdiff1 + bdiff1) > (rdiff2 + gdiff2 + bdiff2))
+                return 1;
+            else if ((rdiff1 + gdiff1 + bdiff1) < (rdiff2 + gdiff2 + bdiff2))
+                return -1;
+            
+            // compare a
+            var adiff1 = Math.Abs(c1.A - target.A);
+            var adiff2 = Math.Abs(c2.A - target.A);
+            if (adiff1 > adiff2)
+                return 1;
+            else if (adiff1 < adiff2)
+                return -1;
+
+            // compare variance
+            var variance1 = Variance(c1.R, c1.G, c1.B);
+            var variance2 = Variance(c2.R, c2.G, c2.B);
+            if (variance1 > variance2)
+                return 1;
+            else if (variance1 < variance2)
+                return -1;
+
+            return 0;
+        }
+
+        private double Variance(params double[] nums)
+        {
+            var avaerage = nums.Sum() / nums.Length;
+            double up = 0;
+            foreach (var x in nums)
+            {
+                up += Math.Pow(x - avaerage, 2);
+            }
+            return up / nums.Length;
         }
 
         public Bitmap TestColor()
