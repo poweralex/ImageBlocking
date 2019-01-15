@@ -34,16 +34,23 @@
             this.btnProcess = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.picOriginal = new System.Windows.Forms.PictureBox();
-            this.picResult = new System.Windows.Forms.PictureBox();
+            this.picProcessed = new System.Windows.Forms.PictureBox();
             this.txtWidth = new System.Windows.Forms.TextBox();
             this.txtHeight = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.picResult = new System.Windows.Forms.PictureBox();
             this.chkChangeColor = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picOriginal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picProcessed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,6 +69,7 @@
             this.txtFile.Name = "txtFile";
             this.txtFile.Size = new System.Drawing.Size(359, 21);
             this.txtFile.TabIndex = 1;
+            this.txtFile.Text = "C:\\Users\\Alex\\Pictures\\nick_wilde__the_sly_fox_by_be_wilder-db8907v.jpg";
             // 
             // btnOpenFile
             // 
@@ -99,9 +107,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
-            this.splitContainer1.Panel2.Controls.Add(this.picResult);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(892, 461);
-            this.splitContainer1.SplitterDistance = 450;
+            this.splitContainer1.SplitterDistance = 195;
             this.splitContainer1.TabIndex = 3;
             // 
             // picOriginal
@@ -109,20 +117,20 @@
             this.picOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picOriginal.Location = new System.Drawing.Point(0, 0);
             this.picOriginal.Name = "picOriginal";
-            this.picOriginal.Size = new System.Drawing.Size(450, 461);
+            this.picOriginal.Size = new System.Drawing.Size(195, 461);
             this.picOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picOriginal.TabIndex = 0;
             this.picOriginal.TabStop = false;
             // 
-            // picResult
+            // picProcessed
             // 
-            this.picResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picResult.Location = new System.Drawing.Point(0, 0);
-            this.picResult.Name = "picResult";
-            this.picResult.Size = new System.Drawing.Size(438, 461);
-            this.picResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picResult.TabIndex = 1;
-            this.picResult.TabStop = false;
+            this.picProcessed.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picProcessed.Location = new System.Drawing.Point(0, 0);
+            this.picProcessed.Name = "picProcessed";
+            this.picProcessed.Size = new System.Drawing.Size(231, 461);
+            this.picProcessed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picProcessed.TabIndex = 1;
+            this.picProcessed.TabStop = false;
             // 
             // txtWidth
             // 
@@ -147,10 +155,39 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "x";
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.picProcessed);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.picResult);
+            this.splitContainer2.Size = new System.Drawing.Size(693, 461);
+            this.splitContainer2.SplitterDistance = 231;
+            this.splitContainer2.TabIndex = 2;
+            // 
+            // picResult
+            // 
+            this.picResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picResult.Location = new System.Drawing.Point(0, 0);
+            this.picResult.Name = "picResult";
+            this.picResult.Size = new System.Drawing.Size(458, 461);
+            this.picResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picResult.TabIndex = 2;
+            this.picResult.TabStop = false;
+            // 
             // chkChangeColor
             // 
             this.chkChangeColor.AutoSize = true;
-            this.chkChangeColor.Location = new System.Drawing.Point(741, 25);
+            this.chkChangeColor.Checked = true;
+            this.chkChangeColor.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkChangeColor.Location = new System.Drawing.Point(756, 25);
             this.chkChangeColor.Name = "chkChangeColor";
             this.chkChangeColor.Size = new System.Drawing.Size(96, 16);
             this.chkChangeColor.TabIndex = 7;
@@ -178,6 +215,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picOriginal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picProcessed)).EndInit();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -192,10 +234,12 @@
         private System.Windows.Forms.Button btnProcess;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.PictureBox picOriginal;
-        private System.Windows.Forms.PictureBox picResult;
+        private System.Windows.Forms.PictureBox picProcessed;
         private System.Windows.Forms.TextBox txtWidth;
         private System.Windows.Forms.TextBox txtHeight;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.PictureBox picResult;
         private System.Windows.Forms.CheckBox chkChangeColor;
     }
 }

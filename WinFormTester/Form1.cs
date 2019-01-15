@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ImageBlocking;
 using ImageBlocking.Images;
@@ -25,6 +22,8 @@ namespace WinFormTester
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             var colors = typeof(Color).GetProperties().Where(x => x.PropertyType == typeof(Color)).Select(x => (Color)x.GetValue(null));
             var config = new
             {
@@ -37,35 +36,79 @@ namespace WinFormTester
                 //    new Block { Color = Color.Green, Size = new Size(2,2) },
                 //    new Block { Color = Color.Pink, Size = new Size(2,2) },
                 //}
-                blocks = colors.Select(x => new Block { Color = x, Size = new Size(2,2) })
+                blocks = colors.Select(x => new Block { Color = x, Size = new Size(2, 2) })
             };
-
+            sw.Stop();
+            Debug.WriteLine($"prepare data took {sw.ElapsedMilliseconds}ms.");
+            sw.Reset();
+            sw.Start();
             // read file
             var image = new JpgImage();
             var imageData = image.OpenImage(txtFile.Text.Trim());
             ShowImage(imageData, picOriginal);
+            sw.Stop();
+            Debug.WriteLine($"read image took {sw.ElapsedMilliseconds}ms");
+            sw.Reset();
+                sw.Start();
             // resize
             ImageHandler handler = new ImageHandler();
-            //ShowImage(handler.TestColor2(), picResult);
-            //return;
-
             var handledImageData = handler.HandleImage(imageData, config.targetSize, config.blocks.Select(x => x.Color), chkChangeColor.Checked);
-            ShowImage(handledImageData, picResult);
-            return;
+            ShowImage(handledImageData, picProcessed);
+            sw.Stop();
+            Debug.WriteLine($"resize took {sw.ElapsedMilliseconds}ms");
+            sw.Reset();
+            sw.Start();
             // blocking
             var processor = new BlockingProcessor();
             var blockingResult = processor.Blocking(handledImageData, config.blocks);
+            sw.Stop();
+            Debug.WriteLine($"blocking took {sw.ElapsedMilliseconds}ms");
+            sw.Reset();
+            sw.Start();
             // show result
-            SHowResult(blockingResult);
+            ShowImage(DrawResult(blockingResult), picResult);
+            sw.Stop();
+            Debug.WriteLine($"show result took {sw.ElapsedMilliseconds}ms");
         }
 
         private void ShowImage(Bitmap image, PictureBox pic)
         {
+            Debug.WriteLine($"showing image({image.Width}x{image.Height}) on {pic.Name}");
             pic.Image = image;
         }
 
-        private void SHowResult(object o)
-        { }
+        private Bitmap DrawResult(Solution solution)
+        {
+            int ratio = 10;
+            Bitmap image = new Bitmap(solution.Size.Width * (ratio + 1), solution.Size.Height * (ratio + 1));
+
+            foreach (var item in solution.Items)
+            {
+                for (int x = item.Left * (ratio + 1); x < (item.Right + 1) * (ratio + 1) - 1; x++)
+                {
+                    for (int y = item.Top * (ratio + 1); y < (item.Bottom + 1) * (ratio + 1) - 1; y++)
+                    {
+                        image.SetPixel(x, y, item.Block.Color);
+                    }
+                }
+                if ((item.Right + 1) * (ratio + 1) - 1 < image.Width)
+                {
+                    for (int i = item.Top * (ratio + 1); i < (item.Bottom + 1) * (ratio + 1); i++)
+                    {
+                        image.SetPixel((item.Right + 1) * (ratio + 1) - 1, i, Color.Black);
+                    }
+                }
+                if ((item.Bottom + 1) * (ratio + 1) - 1 < image.Height)
+                {
+                    for (int i = item.Left * (ratio + 1); i < (item.Right + 1) * (ratio + 1); i++)
+                    {
+                        image.SetPixel(i, (item.Bottom + 1) * (ratio + 1) - 1, Color.Black);
+                    }
+                }
+            }
+
+            return image;
+        }
 
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
