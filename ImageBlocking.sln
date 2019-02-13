@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageBlocking", "ImageBlocking\ImageBlocking.csproj", "{DC1E3D12-4426-4109-8B6F-CB57B1A1A5F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormTester", "WinFormTester\WinFormTester.csproj", "{20827881-F824-4930-A459-3407F8FEE953}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC1E3D12-4426-4109-8B6F-CB57B1A1A5F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC1E3D12-4426-4109-8B6F-CB57B1A1A5F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC1E3D12-4426-4109-8B6F-CB57B1A1A5F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC1E3D12-4426-4109-8B6F-CB57B1A1A5F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20827881-F824-4930-A459-3407F8FEE953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20827881-F824-4930-A459-3407F8FEE953}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20827881-F824-4930-A459-3407F8FEE953}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20827881-F824-4930-A459-3407F8FEE953}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {061782FD-14FF-46E7-A36C-0B2415DA4570}
+	EndGlobalSection
+EndGlobal
