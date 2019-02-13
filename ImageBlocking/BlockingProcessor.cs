@@ -8,14 +8,14 @@ namespace ImageBlocking
 {
     public class BlockingProcessor
     {
-        public Solution Blocking(Bitmap image, IEnumerable<Block> blocks)
+        public Solution Blocking(Bitmap image, Inventory blocks)
         {
-            var solution = new Solution {Size= image.Size };
+            var solution = new Solution { Image = image, Size= image.Size };
             for (int iy = 0; iy < image.Height; iy++)
             {
                 for (int ix = 0; ix < image.Width; )
                 {
-                    var item = solution.Get(ix, iy);
+                    var item = solution.GetSolutionItem(ix, iy);
                     if (item == null)
                     {
                         (Block b, bool r) = FindBlock(image, solution, ix, iy, blocks);
@@ -66,7 +66,7 @@ namespace ImageBlocking
                 x = 0;
                 y++;
 
-                var item = solution.Get(x, y);
+                var item = solution.GetSolutionItem(x, y);
                 if (item != null)
                 {
                     return GetNextPosition(image, solution,x, y, item);
@@ -77,10 +77,11 @@ namespace ImageBlocking
 
         }
 
-        private (Block, bool) FindBlock(Bitmap image, Solution solution, int x, int y, IEnumerable<Block> blocks)
+        private (Block, bool) FindBlock(Bitmap image, Solution solution, int x, int y, Inventory blocks)
         {
             // sort by block size, put biggest block first
-            var validBlocks = blocks.Where(b => b.Color.ToArgb() == image.GetPixel(x, y).ToArgb());
+            // TODO: consider inventory
+            var validBlocks = blocks.Items.Where(b => b.Block.Color.ToArgb() == image.GetPixel(x, y).ToArgb() && b.Qty > 0);
             if (validBlocks?.Any() != true)
             {
                 return (null, false);
@@ -88,18 +89,17 @@ namespace ImageBlocking
 
             // try put block on picture
             List<bool> rotates = new List<bool> { false, true };
-            foreach (var block in validBlocks.OrderBy(b => b.Size.Width * b.Size.Width * b.Size.Height))
+            foreach (var block in validBlocks.OrderByDescending(b => b.Block.Size.Width * b.Block.Size.Width * b.Block.Size.Height))
             {
                 foreach (var rotate in rotates)
                 {
-                    if (solution.TestPut(x, y, block, rotate))
+                    if (solution.TestPut(x, y, block.Block, rotate))
                     {
-                        return (block, rotate);
+                        block.Qty--;
+                        return (block.Block, rotate);
                     }
                 }
             }
-
-            // TODO: consider inventory
 
             return (null, false);
         }

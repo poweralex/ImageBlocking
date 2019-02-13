@@ -7,14 +7,15 @@ namespace ImageBlocking.Models
 {
     public class Solution
     {
+        public Bitmap Image { get; set; }
         public Size Size { get; set; }
-        public List<SolutionItem> Items { get; set; } = new List<SolutionItem>();
+        public List<SolutionItem> SolutionItems { get; set; } = new List<SolutionItem>();
 
         public SolutionItem Put(int x, int y, Block b, bool rotate)
         {
-            if (Items == null)
+            if (SolutionItems == null)
             {
-                Items = new List<SolutionItem>();
+                SolutionItems = new List<SolutionItem>();
             }
             var item = new SolutionItem
             {
@@ -24,8 +25,8 @@ namespace ImageBlocking.Models
             };
             if (item.Right < Size.Width && item.Bottom < Size.Height)
             {
-                Items.Add(item);
-                Debug.WriteLine($"put {Items.Count()} items");
+                SolutionItems.Add(item);
+                Debug.WriteLine($"put {SolutionItems.Count()} items");
 
                 return item;
             }
@@ -35,13 +36,28 @@ namespace ImageBlocking.Models
             }
         }
 
+        /// <summary>
+        /// test if position(x,y) can put a block with rotate
+        /// </summary>
+        /// <param name="x">position x</param>
+        /// <param name="y">position y</param>
+        /// <param name="b">block</param>
+        /// <param name="rotate">rotate</param>
+        /// <returns>true or false</returns>
         public bool TestPut(int x, int y, Block b, bool rotate)
         {
-            for (int iy = y; iy < y+b.Size.Height; iy++)
+            var blockWidth = rotate ? b.Size.Height : b.Size.Width;
+            var blockHeight = rotate ? b.Size.Width : b.Size.Height;
+            for (int iy = y; iy < y + blockHeight; iy++)
             {
-                for (int ix = x; ix < x+b.Size.Width; ix++)
+                for (int ix = x; ix < x + blockWidth; ix++)
                 {
-                    if (Get(ix, iy) != null)
+                    if (GetSolutionItem(ix, iy) != null)
+                    {
+                        return false;
+                    }
+
+                    if (GetColor(ix, iy).ToArgb() != b.Color.ToArgb())
                     {
                         return false;
                     }
@@ -52,21 +68,30 @@ namespace ImageBlocking.Models
         }
 
 
-        public SolutionItem Get(int x, int y)
+        public SolutionItem GetSolutionItem(int x, int y)
         {
-            var item = Items.FirstOrDefault(i => i.Position.Left == x && i.Position.Top == y);
+            var item = SolutionItems.FirstOrDefault(i => i.Position.Left == x && i.Position.Top == y);
             if (item != null)
             {
                 return item;
             }
 
-            item = Items.FirstOrDefault(i => x >= i.Left && x <= i.Right && y >= i.Top && y <= i.Bottom);
+            item = SolutionItems.FirstOrDefault(i => x >= i.Left && x <= i.Right && y >= i.Top && y <= i.Bottom);
             if (item != null)
             {
                 return item;
             }
 
             return null;
+        }
+
+        public Color GetColor(int x, int y)
+        {
+            if (x >= Image.Width || y >= Image.Height)
+            {
+                return default(Color);
+            }
+            return Image.GetPixel(x, y);
         }
     }
 
